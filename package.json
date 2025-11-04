@@ -1,0 +1,36 @@
+{
+  "name": "booktracker",
+  "version": "1.0.0",
+  "description": "Spec-Kitを使って、動画で蔵書管理するアプリを作成してみる",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "build": "echo \"Build step not configured yet\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KazukiOtomo/BookTracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KazukiOtomo/BookTracker/issues"
+  },
+  "homepage": "https://github.com/KazukiOtomo/BookTracker#readme",
+  "dependencies": {
+    "@letuscode/spec-kit": "^0.1.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "eslint": "^9.39.1",
+    "jest": "^30.2.0",
+    "prettier": "^3.6.2"
+  }
+}
