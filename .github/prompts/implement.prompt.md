@@ -1,55 +1,34 @@
----
-description: Execute the implementation plan by processing and executing all tasks defined in tasks.md
+description: tasks.md のタスク計画に従い実装を段階的に遂行し完了検証する。
 scripts:
-  sh: scripts/bash/check-implementation-prerequisites.sh --json
-  ps: scripts/powershell/check-implementation-prerequisites.ps1 -Json
+sh: scripts/bash/check-implementation-prerequisites.sh --json
+ps: scripts/powershell/check-implementation-prerequisites.ps1 -Json
+
 ---
 
-Given the current feature context, do this:
+次を順に実行:
 
-1. Run `{SCRIPT}` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute.
+1. ルートで `{SCRIPT}` を走らせ `FEATURE_DIR`, `AVAILABLE_DOCS` を取得（絶対パス運用）。
+2. コンテキスト読込:
+   - 必須: `tasks.md`, `plan.md`
+   - 任意: `data-model.md`, `contracts/`, `research.md`, `quickstart.md`
+3. `tasks.md` を解析し: フェーズ / 依存 / タスクID / 説明 / ファイルパス / 並列マーカー[P] を抽出。
+4. 計画通り実行:
+   - フェーズ順守（全完了→次）
+   - 共有ファイルは直列 / 独立は [P] 並列
+   - TDD: テストタスク→実装タスク
+   - フェーズ境界で検証チェック
+5. 実行指針:
+   - Setup → Tests → Core(Model/Service/Endpoint) → Integration(DB/MW/Logging/External) → Polish(性能/Doc/追加テスト)
+6. 進捗 & エラー:
+   - 各タスク完了後進捗更新
+   - 非並列タスク失敗で停止
+   - 並列は成功分継続し失敗詳細を収集
+   - 原因 / 次アクションを明確化
+   - 完了タスクは `tasks.md` を [X] に更新
+7. 完了検証:
+   - 全タスク [X]
+   - 仕様整合 / テスト合格 / カバレッジ基準達成
+   - 設計逸脱なし
+   - 最終サマリー報告
 
-2. Load and analyze the implementation context:
-   - **REQUIRED**: Read tasks.md for the complete task list and execution plan
-   - **REQUIRED**: Read plan.md for tech stack, architecture, and file structure
-   - **IF EXISTS**: Read data-model.md for entities and relationships
-   - **IF EXISTS**: Read contracts/ for API specifications and test requirements
-   - **IF EXISTS**: Read research.md for technical decisions and constraints
-   - **IF EXISTS**: Read quickstart.md for integration scenarios
-
-3. Parse tasks.md structure and extract:
-   - **Task phases**: Setup, Tests, Core, Integration, Polish
-   - **Task dependencies**: Sequential vs parallel execution rules
-   - **Task details**: ID, description, file paths, parallel markers [P]
-   - **Execution flow**: Order and dependency requirements
-
-4. Execute implementation following the task plan:
-   - **Phase-by-phase execution**: Complete each phase before moving to the next
-   - **Respect dependencies**: Run sequential tasks in order, parallel tasks [P] can run together
-   - **Follow TDD approach**: Execute test tasks before their corresponding implementation tasks
-   - **File-based coordination**: Tasks affecting the same files must run sequentially
-   - **Validation checkpoints**: Verify each phase completion before proceeding
-
-5. Implementation execution rules:
-   - **Setup first**: Initialize project structure, dependencies, configuration
-   - **Tests before code**: If you need to write tests for contracts, entities, and integration scenarios
-   - **Core development**: Implement models, services, CLI commands, endpoints
-   - **Integration work**: Database connections, middleware, logging, external services
-   - **Polish and validation**: Unit tests, performance optimization, documentation
-
-6. Progress tracking and error handling:
-   - Report progress after each completed task
-   - Halt execution if any non-parallel task fails
-   - For parallel tasks [P], continue with successful tasks, report failed ones
-   - Provide clear error messages with context for debugging
-   - Suggest next steps if implementation cannot proceed
-   - **IMPORTANT** For completed tasks, make sure to mark the task off as [X] in the tasks file.
-
-7. Completion validation:
-   - Verify all required tasks are completed
-   - Check that implemented features match the original specification
-   - Validate that tests pass and coverage meets requirements
-   - Confirm the implementation follows the technical plan
-   - Report final status with summary of completed work
-
-Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/tasks` first to regenerate the task list.
+注: タスク分解が不十分なら `/tasks` の再生成を推奨して中断。

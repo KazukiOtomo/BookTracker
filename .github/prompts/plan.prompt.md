@@ -1,39 +1,21 @@
----
-description: Execute the implementation planning workflow using the plan template to generate design artifacts.
+description: 実装計画テンプレートを用いて設計フェーズ成果物を生成し次工程へ橋渡しする。
 scripts:
-  sh: scripts/bash/setup-plan.sh --json
-  ps: scripts/powershell/setup-plan.ps1 -Json
+sh: scripts/bash/setup-plan.sh --json
+ps: scripts/powershell/setup-plan.ps1 -Json
+
 ---
 
-Given the implementation details provided as an argument, do this:
+実装詳細（引数）を基に以下を実行:
 
-1. Run `{SCRIPT}` from the repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. All future file paths must be absolute.
-2. Read and analyze the feature specification to understand:
-   - The feature requirements and user stories
-   - Functional and non-functional requirements
-   - Success criteria and acceptance criteria
-   - Any technical constraints or dependencies mentioned
+1. ルートで `{SCRIPT}` を実行し JSON から `FEATURE_SPEC`, `IMPL_PLAN`, `SPECS_DIR`, `BRANCH` を取得（以後絶対パス運用）。
+2. FEATURE_SPEC を解析し: 要件 / ユーザーストーリー / NFR / 成功 & 受入基準 / 制約 / 依存を抽出。
+3. `/memory/constitution.md` を読み憲章上の制約・必須原則を反映。
+4. `/templates/plan-template.md`（IMPL_PLAN に複製済）を用いメインフロー(1-9)実行:
+   - Phase 0: `research.md`
+   - Phase 1: `data-model.md`, `contracts/`, `quickstart.md`
+   - Phase 2: `tasks.md`
+   - 技術コンテキストに {ARGS} を統合。フェーズ完了ごとに進捗更新。ゲート/エラーチェック遵守。
+5. 完了検証: 全フェーズ完了 / 生成物存在 / ERROR 非検出。
+6. ブランチ / 生成物パス / 生成一覧を報告。
 
-3. Read the constitution at `/memory/constitution.md` to understand constitutional requirements.
-
-4. Execute the implementation plan template:
-   - Load `/templates/plan-template.md` (already copied to IMPL_PLAN path)
-   - Set Input path to FEATURE_SPEC
-   - Run the Execution Flow (main) function steps 1-9
-   - The template is self-contained and executable
-   - Follow error handling and gate checks as specified
-   - Let the template guide artifact generation in $SPECS_DIR:
-     - Phase 0 generates research.md
-     - Phase 1 generates data-model.md, contracts/, quickstart.md
-     - Phase 2 generates tasks.md
-   - Incorporate user-provided details from arguments into Technical Context: {ARGS}
-   - Update Progress Tracking as you complete each phase
-
-5. Verify execution completed:
-   - Check Progress Tracking shows all phases complete
-   - Ensure all required artifacts were generated
-   - Confirm no ERROR states in execution
-
-6. Report results with branch name, file paths, and generated artifacts.
-
-Use absolute paths with the repository root for all file operations to avoid path issues.
+パス解決は常にリポジトリ絶対パスで処理。
