@@ -50,9 +50,6 @@ npm install
 # テスト実行
 npm test
 
-# Prismaクライアント生成
-npm run prisma:generate
-
 # リント実行
 npm run lint
 
@@ -82,34 +79,6 @@ BookTracker/
 - **データベース**: SQLite / PostgreSQL
 - **テスト**: Jest
 - **CI/CD**: GitHub Actions
-
-## 開発サーバーの起動
-
-```bash
-# 事前にDATABASE_URLを設定（例: file:./dev.db）
-export DATABASE_URL="file:./dev.db"
-
-# サーバー起動
-npm run start
-```
-
-FFmpegの実行ファイルとTesseract OCRエンジンがローカルにインストールされている必要があります。開発中にこれらのバイナリを使用したくない場合は、以下の環境変数で処理をスキップできます。
-
-```
-SKIP_FFMPEG=true
-SKIP_TESSERACT=true
-```
-
-## 主要な環境変数
-
-| 変数名           | デフォルト値 | 説明                                                         |
-| ---------------- | ------------ | ------------------------------------------------------------ |
-| `PORT`           | `3000`       | APIサーバーのポート番号                                      |
-| `DATABASE_URL`   | -            | Prismaが接続するデータベースURL（例: `file:./dev.db`）     |
-| `UPLOAD_DIR`     | `uploads`    | 動画ファイルの保存先ディレクトリ                             |
-| `FRAME_DIR`      | `tmp/frames` | 抽出したフレーム画像の保存ディレクトリ                       |
-| `SKIP_FFMPEG`    | `false`      | `true`でFFmpegによるフレーム抽出をスキップ                  |
-| `SKIP_TESSERACT` | `false`      | `true`でTesseractによるOCR処理をスタブに置き換え           |
 
 ## ドキュメント
 
