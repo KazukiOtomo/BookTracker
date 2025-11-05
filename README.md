@@ -43,9 +43,17 @@ BookTrackerは、書架を撮影した動画から書籍タイトルをOCR技術
 
 ## セットアップ
 
+### ローカル環境
+
 ```bash
 # 依存関係のインストール
 npm install
+
+# アプリケーションの起動
+npm start
+
+# 開発モード（ファイル変更で自動再起動）
+npm run dev
 
 # テスト実行
 npm test
@@ -56,6 +64,60 @@ npm run lint
 # フォーマット
 npm run format
 ```
+
+アプリケーションは http://localhost:3000 で起動します。
+
+### Docker環境
+
+```bash
+# コンテナのビルドと起動
+docker-compose up -d
+
+# アプリケーションにアクセス
+# http://localhost:3000
+
+# APIエンドポイントを確認
+curl http://localhost:3000
+
+# ヘルスチェック
+curl http://localhost:3000/health
+
+# テストを実行
+docker-compose exec app npm test
+
+# コンテナ内でシェルを開く
+docker-compose exec app sh
+
+# ログを確認
+docker-compose logs -f app
+
+# コンテナを停止
+docker-compose down
+
+# データベースを含めて完全に削除
+docker-compose down -v
+```
+
+**含まれるサービス:**
+
+- `app`: Node.js アプリケーション（Tesseract OCR、FFmpeg含む）
+  - ポート: 3000
+  - エンドポイント: http://localhost:3000
+- `db`: PostgreSQL データベース
+  - ポート: 5432
+
+**利用可能なAPIエンドポイント:**
+
+- `GET /` - API情報
+- `GET /health` - ヘルスチェック
+- `GET /api/books` - 書籍一覧（未実装）
+- `GET /api/videos` - 動画処理（未実装）
+
+**環境変数:**
+
+- `DATABASE_URL`: PostgreSQL接続URL（docker-compose.ymlで設定済み）
+- `NODE_ENV`: development/production
+- `PORT`: サーバーポート（デフォルト: 3000）
 
 ## プロジェクト構造
 
@@ -74,11 +136,12 @@ BookTracker/
 ## 技術スタック
 
 - **言語**: Node.js / JavaScript
-- **OCR**: Tesseract.js
+- **OCR**: Tesseract.js（日本語・英語対応）
 - **動画処理**: FFmpeg
-- **データベース**: SQLite / PostgreSQL
+- **データベース**: PostgreSQL
 - **テスト**: Jest
 - **CI/CD**: GitHub Actions
+- **コンテナ**: Docker / Docker Compose
 
 ## ドキュメント
 

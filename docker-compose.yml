@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Node.jsアプリケーション
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: booktracker-app
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./uploads:/app/uploads
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://booktracker:booktracker@db:5432/booktracker
+    depends_on:
+      - db
+    command: npm start
+
+  # PostgreSQLデータベース
+  db:
+    image: postgres:16-alpine
+    container_name: booktracker-db
+    environment:
+      - POSTGRES_USER=booktracker
+      - POSTGRES_PASSWORD=booktracker
+      - POSTGRES_DB=booktracker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  postgres_data:
